@@ -391,27 +391,27 @@
                         }
                     }
 
-                    var info = new OAuthInfo({
-                            appId: "FiNWujf7BlhYHjcC",
-                            portalUrl: "https://txdot.maps.arcgis.com",
-                            popup: false
-                        });
-                    IdentityManager.registerOAuthInfos([info]);
-                    IdentityManager.getCredential(info.portalUrl + "/sharing");
+                    // var info = new OAuthInfo({
+                    //         appId: "FiNWujf7BlhYHjcC",
+                    //         portalUrl: "https://txdot.maps.arcgis.com",
+                    //         popup: false
+                    //     });
+                    // IdentityManager.registerOAuthInfos([info]);
+                    // IdentityManager.getCredential(info.portalUrl + "/sharing");
 
-                    new arcgisPortal.Portal(info.portalUrl).signIn().then(
-                        function (portalUser){
-                            username = portalUser.fullName;
-                            domAttr.set("user", "innerHTML", portalUser.fullName);
-                        }
-                    )
-                    on(dom.byId("user"), "click", function (){
-                        var yes = confirm("Would you like to sign out?");
-                        if (yes === true) {
-                            IdentityManager.destroyCredentials();
-                            window.location.reload();
-                        }
-                    });
+                    // new arcgisPortal.Portal(info.portalUrl).signIn().then(
+                    //     function (portalUser){
+                    //         username = portalUser.fullName;
+                    //         domAttr.set("user", "innerHTML", portalUser.fullName);
+                    //     }
+                    // )
+                    // on(dom.byId("user"), "click", function (){
+                    //     var yes = confirm("Would you like to sign out?");
+                    //     if (yes === true) {
+                    //         IdentityManager.destroyCredentials();
+                    //         window.location.reload();
+                    //     }
+                    // });
 
                     window.onload = start;
 
