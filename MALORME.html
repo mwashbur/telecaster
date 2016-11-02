@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<!-- This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/ -->
-<!-- <html manifest="malorme.manifest"> -->
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- saved from url=(0054)https://www.smudgeservices.com/malorme/index.html?i=1# -->
+<html class="dj_webkit dj_chrome dj_contentbox"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
         <title>MALORME</title>
 
-        <link rel="stylesheet" href="https://js.arcgis.com/3.16/esri/css/esri.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./MALORME_files/esri.css">
+        <link rel="stylesheet" href="./MALORME_files/bootstrap.min.css">
 
         <style type="text/css">
             html, body, #divMap {
@@ -108,11 +106,11 @@
 
         </style>
 
-        <script data-dojo-config="async:true, aliases: [
-            ['jquery', 'https://code.jquery.com/jquery-2.2.4.min.js'],
-            ['jqueryui', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'],
-            ['bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js']
-            ]" src="https://js.arcgis.com/3.16/">
+        <script type="text/javascript" charset="utf-8" src="./MALORME_files/jsapi_en-us.js.download"></script><script type="text/javascript" charset="utf-8" src="./MALORME_files/jquery-2.2.4.min.js.download"></script><script type="text/javascript" charset="utf-8" src="./MALORME_files/jquery-ui.min.js.download"></script><script type="text/javascript" charset="utf-8" src="./MALORME_files/Portal.js.download"></script><script type="text/javascript" charset="utf-8" src="./MALORME_files/svg.js.download"></script><script type="text/javascript" charset="utf-8" src="./MALORME_files/filters.js.download"></script><script type="text/javascript" charset="utf-8" src="./MALORME_files/svgext.js.download"></script><script type="text/javascript" charset="utf-8" src="./MALORME_files/bootstrap.min.js.download"></script><script data-dojo-config="async:true, aliases: [
+            [&#39;jquery&#39;, &#39;https://code.jquery.com/jquery-2.2.4.min.js&#39;],
+            [&#39;jqueryui&#39;, &#39;https://code.jquery.com/ui/1.11.4/jquery-ui.min.js&#39;],
+            [&#39;bootstrap&#39;, &#39;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js&#39;]
+            ]" src="./MALORME_files/saved_resource">
         </script>
 
         <script>
@@ -392,6 +390,8 @@
                     }
 
                     var info = new OAuthInfo({
+                            // Adam's old appID
+                            // appId: "CxvikkBbFfDyeH9P", 
                             appId: "DVEwwUUKw7P7fC7q",
                             portalUrl: "https://txdot.maps.arcgis.com",
                             popup: false
@@ -423,18 +423,18 @@
     <body ontouchstart="">
         <div>
             <table>
-                <tr>
+                <tbody><tr>
                     <td><span id="user" style="display:block;"></span></td>
                     <td></td>
                 </tr>
-            </table>
+            </tbody></table>
         </div>
         <div>
         <div id="wait">Uploading Data, please wait...</div>
         <div id="overlay"></div>
         <div id="header">
-            <div id="outputLocation"></div>
-            <div id="pointStatus"></div>
+            <div id="outputLocation" style="color: green;">30.49637,-97.84238</div>
+            <div id="pointStatus">0 point(s) logged.</div>
         </div>
         <div id="container">
             <table class="table">
@@ -444,33 +444,33 @@
                             <div>
                                 <label for="rte_prefix">Route Prefix</label>
                                 <select class="form-control mkr_option" id="rte_prefix">
-                                    <option class='rte_pfx' value='BF'>Business FM - BF</option>
-                                    <option class='rte_pfx' value='BI'>Business IH - BI</option>
-                                    <option class='rte_pfx' value='BS'>Business State - BS</option>
-                                    <option class='rte_pfx' value='BU'>Business US - BU</option>
-                                    <option class='rte_pfx' value='CR'>County roads - CR</option>
-                                    <option class='rte_pfx' value='CS'>Local City Street - CS</option>
-                                    <option class='rte_pfx' value='FC'>Functionally Classified City Streets - FC</option>
-                                    <option class='rte_pfx' value='FD'>Federal Road - FD</option>
-                                    <option class='rte_pfx' value='FM'>Farm to Market - FM</option>
-                                    <option class='rte_pfx' value='FS'>FM Spur - FS</option>
-                                    <option class='rte_pfx' value='IH'>Interstate - IH</option>
-                                    <option class='rte_pfx' value='PA'>Principal Arterial - PA</option>
-                                    <option class='rte_pfx' value='PR'>Park Road - PR</option>
-                                    <option class='rte_pfx' value='RE'>Recreational Road - RE</option>
-                                    <option class='rte_pfx' value='RM'>Ranch to Market - RM</option>
-                                    <option class='rte_pfx' value='RP'>Recreational Road Spur - RP</option>
-                                    <option class='rte_pfx' value='RR'>Ranch Road - RR</option>
-                                    <option class='rte_pfx' value='RS'>RM Spur - RS</option>
-                                    <option class='rte_pfx' value='RU'>RR Spur - RU</option>
-                                    <option class='rte_pfx' value='SA'>State Alternate - SA</option>
-                                    <option class='rte_pfx' value='SH'>State Highway - SH</option>
-                                    <option class='rte_pfx' value='SL'>State Loop - SL</option>
-                                    <option class='rte_pfx' value='SS'>State Spur - SS</option>
-                                    <option class='rte_pfx' value='UA'>US Alternate - UA</option>
-                                    <option class='rte_pfx' value='UP'>US Spur - UP</option>
-                                    <option class='rte_pfx' value='US'>US Highway - US</option>
-                                    <option class='rte_pfx' value='NA'>Not Applicable - NA</option>
+                                    <option class="rte_pfx" value="BF">Business FM - BF</option>
+                                    <option class="rte_pfx" value="BI">Business IH - BI</option>
+                                    <option class="rte_pfx" value="BS">Business State - BS</option>
+                                    <option class="rte_pfx" value="BU">Business US - BU</option>
+                                    <option class="rte_pfx" value="CR">County roads - CR</option>
+                                    <option class="rte_pfx" value="CS">Local City Street - CS</option>
+                                    <option class="rte_pfx" value="FC">Functionally Classified City Streets - FC</option>
+                                    <option class="rte_pfx" value="FD">Federal Road - FD</option>
+                                    <option class="rte_pfx" value="FM">Farm to Market - FM</option>
+                                    <option class="rte_pfx" value="FS">FM Spur - FS</option>
+                                    <option class="rte_pfx" value="IH">Interstate - IH</option>
+                                    <option class="rte_pfx" value="PA">Principal Arterial - PA</option>
+                                    <option class="rte_pfx" value="PR">Park Road - PR</option>
+                                    <option class="rte_pfx" value="RE">Recreational Road - RE</option>
+                                    <option class="rte_pfx" value="RM">Ranch to Market - RM</option>
+                                    <option class="rte_pfx" value="RP">Recreational Road Spur - RP</option>
+                                    <option class="rte_pfx" value="RR">Ranch Road - RR</option>
+                                    <option class="rte_pfx" value="RS">RM Spur - RS</option>
+                                    <option class="rte_pfx" value="RU">RR Spur - RU</option>
+                                    <option class="rte_pfx" value="SA">State Alternate - SA</option>
+                                    <option class="rte_pfx" value="SH">State Highway - SH</option>
+                                    <option class="rte_pfx" value="SL">State Loop - SL</option>
+                                    <option class="rte_pfx" value="SS">State Spur - SS</option>
+                                    <option class="rte_pfx" value="UA">US Alternate - UA</option>
+                                    <option class="rte_pfx" value="UP">US Spur - UP</option>
+                                    <option class="rte_pfx" value="US">US Highway - US</option>
+                                    <option class="rte_pfx" value="NA">Not Applicable - NA</option>
                                 </select>
                             </div>
                         </td>
@@ -492,36 +492,37 @@
                             <div>
                                 <label for="mkr_suffix">Marker Suffix</label>
                                 <select class="form-control mkr_option" id="mkr_suffix">
-                                    <option class='mkr_sfx' value=''>None</option>
-                                    <option class='mkr_sfx' value='A'>A</option>
-                                    <option class='mkr_sfx' value='B'>B</option>
-                                    <option class='mkr_sfx' value='C'>C</option>
-                                    <option class='mkr_sfx' value='D'>D</option>
-                                    <option class='mkr_sfx' value='E'>E</option>
-                                    <option class='mkr_sfx' value='F'>F</option>
+                                    <option class="mkr_sfx" value="">None</option>
+                                    <option class="mkr_sfx" value="A">A</option>
+                                    <option class="mkr_sfx" value="B">B</option>
+                                    <option class="mkr_sfx" value="C">C</option>
+                                    <option class="mkr_sfx" value="D">D</option>
+                                    <option class="mkr_sfx" value="E">E</option>
+                                    <option class="mkr_sfx" value="F">F</option>
                                 </select>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan=2 class="option_line"><button id="cmdCollectMarker" class="btn btn-default" value="Collect Marker" type="button">Collect Marker</button></td>
+                        <td colspan="2" class="option_line"><button id="cmdCollectMarker" class="btn btn-default" value="Collect Marker" type="button">Collect Marker</button></td>
                     </tr>
                     <tr>
-                        <td colspan=2><div style="font-weight: bold;"><hr color="black" width="35%" style="display: inline-block; vertical-align:middle; height:3px;">  Options  <hr color="black" width="35%" style="display: inline-block; vertical-align:middle; height:3px;"></div></td>
+                        <td colspan="2"><div style="font-weight: bold;"><hr color="black" width="35%" style="display: inline-block; vertical-align:middle; height:3px;">  Options  <hr color="black" width="35%" style="display: inline-block; vertical-align:middle; height:3px;"></div></td>
                     </tr>
                     <tr>
                         <td><button id="cmdClearMyStorage" class="btn btn-default" value="Clear Local Storage" type="button">Start Over</button></td>
                         <td><button id="cmdDeleteLast" class="btn btn-default" value="Delete Last Point" type="button">Delete Last Point</button></td>
                     </tr>
                     <tr>
-                        <td colspan=2><button id="cmdUploadData" class="btn btn-default" value="Upload Data" type="button">Upload Collected Data</button></td>
+                        <td colspan="2"><button id="cmdUploadData" class="btn btn-default" value="Upload Data" type="button">Upload Collected Data</button></td>
                     </tr>
                     <tr>
-                        <td colspan=2><div id="uploadStatus" style="min-height: 80px;"></div></td>
+                        <td colspan="2"><div id="uploadStatus" style="min-height: 80px;"></div></td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <!-- <div id="divMap"></div> -->
-    </body>
-</html>
+    
+
+</div></body></html>
