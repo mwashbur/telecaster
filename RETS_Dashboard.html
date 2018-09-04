@@ -197,7 +197,10 @@
 		"esri/basemaps",
         "esri/layers/WMTSLayer",
         "esri/layers/WMTSLayerInfo",
+        "esri/arcgis/OAuthInfo",
+        "esri/IdentityManager",
 
+        "dojo/parser",
         "dojo/_base/array",
         "dojo/keys",
         "dojo/Deferred",
@@ -240,7 +243,10 @@
             esriBasemaps,
             WMTSLayer,
             WMTSLayerInfo,
+            OAuthInfo,
+            IdentityManager,
 
+            parser,
             array, 
             keys,
             Deferred,
@@ -248,6 +254,17 @@
             query, 
             domConstruct
 			){
+
+		parser.parse();
+
+	// Start up Identify Manager to handle permissions for layers with TxDOT-only access
+          var info = new OAuthInfo({
+                    appId: "mzUb97L38u61Wa4a",
+                    portalUrl: "https://txdot.maps.arcgis.com",
+                    popup: false
+                });
+            IdentityManager.registerOAuthInfos([info]);
+            IdentityManager.getCredential(info.portalUrl + "/sharing");				
 
 	// CREATE MAP..........................................................
 
@@ -287,6 +304,7 @@
 		var GRIDAnalyst = '';
 	  	var expArray = [];
 	  	var count = 1;
+	  	var appVersion = "Version 1.0"
 
 		//GOOGLE IMAGERY//
 
@@ -623,7 +641,8 @@
 			});
 
 		// Load a FeatureTable and update Status Table to the application once map loads
-	        map.on("load", function(){
+	        map.on("load", function(){	        	
+	        	console.log(appVersion);
 	        	loadTable();
 	        	queryStatus();
 	        	console.log("Map on-load event");
