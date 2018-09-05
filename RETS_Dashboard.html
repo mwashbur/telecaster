@@ -91,12 +91,27 @@
         display: block;
 	 }
 
-	 #basemapDiv {
+	 #basemapButton {
 	 	position: absolute;
-        left: 20px;
-        top: 200px;
+	 	text-align: center;
+	 	padding: 0px 10px;
+	 	color: white;
+	 	background-color: #337ab7;
+        background-size: 24px 24px;
+        border-radius: 5px;
+        width: auto;
+        border: 5px;
+        line-height: 32px;
+        height: 32px;
+        right: 20px;
+        top: 20px;
         z-index: 30;
         display: block;
+	 }
+
+	 #basemapButton:hover {
+	 	background: grey;
+	 	cursor: pointer;
 	 }
 
 	 #tableDiv{
@@ -270,17 +285,19 @@
 
 		//TxDOT Vector Tile Basemap    
 		var TxDOTVectorTileLayer = new VectorTileLayer("https://tiles.arcgis.com/tiles/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Vector_Tile_Basemap/VectorTileServer");
+		TxDOTVectorTileLayer.id = "vectorLayer";
 		
 
 		map = new Map("mapDiv", {
 			center: [-99.341389, 31.132222],
 			zoom: 6,
 			logo: false,
-			basemap: TxDOTVectorTileLayer,
 			isDoubleClickZoom: false
 		});
 
 		map.addLayer(TxDOTVectorTileLayer);
+		var layerId = map.getLayer("vectorLayer");
+		console.log (layerId.id);
 
 	// VARIABLES...........................................................
 
@@ -324,32 +341,8 @@
         };		
 
 		// Add Google Imagery WMTS layer
-        google = new WMTSLayer("https://txgi.tnris.org/login/path/pegasus-horizon-castro-comrade/wmts", GoogleLayerOptions);
-
-        // Add Google Imagery as basemap option
-        esriBasemaps.Google = {
-      		baseMapLayers: [{url: "https://txgi.tnris.org/login/path/pegasus-horizon-castro-comrade/wmts"}
-      		],
-      		thumbnailUrl: "http://maps.dot.state.tx.us/AGO_Template/TxDOT_Viewer/images/Basemaps/SPM.png",
-      		title: "Google"
-		};
-
-		esriBasemaps.SPM = {
-            baseMapLayers: [
-              {url: "https://tiles.arcgis.com/tiles/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Vector_Tile_Basemap/VectorTileServer"}
-            ],
-            title : "TxDOT",
-            thumbnailUrl : "http://maps.dot.state.tx.us/AGO_Template/TxDOT_Viewer/images/Basemaps/SPM.png"
-          };
-
-     	// Basemap Toggle
-		var basemapToggle = new BasemapToggle({
-		  theme: "BasemapToggle",
-		  map: map,
-		  visible: true,
-		  basemap: "Google"
-		}, "basemapDiv");
-		basemapToggle.startup();
+        var google = new WMTSLayer("https://txgi.tnris.org/login/path/pegasus-horizon-castro-comrade/wmts", GoogleLayerOptions);
+        google.id = "googleLayer";
 
      	
 		// RETS layer
@@ -781,7 +774,23 @@
  		 		alert( "Handler for .change() called." );
 			});
 
-		
+		// On click event to switch basemaps
+			$("#basemapButton").click(function(){				
+				var text = $(this).text();
+				console.log(text);
+				if (text == "Imagery"){
+					console.log("Switching to TxDOT Imagery");
+					map.removeLayer(TxDOTVectorTileLayer);
+					map.addLayer(google);
+					document.getElementById("basemapButton").innerHTML = "TxDOT";
+				}
+				if (text == "TxDOT"){
+					console.log("Switching to Google Imagery");
+					map.removeLayer(google);
+					map.addLayer(TxDOTVectorTileLayer);
+					document.getElementById("basemapButton").innerHTML = "Imagery";
+				}
+			});
 
       	// Activate Toolbar
       		// workflowLyr.on("dbl-click", activateToolbar);
@@ -1020,11 +1029,14 @@
 				var query = new Query();  
 				query.where = "1=1";    
 				workflowLyr.queryFeatures(query, function (featureSet) {  
+					console.log(featureSet);
 				    var data = [];  
 				    if (featureSet && featureSet.features && featureSet.features.length > 0) {  
 				        data = featureSet.features;  
 				    }  
-				    var zoomExtent = esri.graphicsExtent(data);  
+				    console.log(data);
+				    var zoomExtent = esri.graphicsExtent(data); 
+				    console.log(zoomExtent); 
 				    map.setExtent(zoomExtent, true);  
 				});	
 			}
@@ -1187,7 +1199,7 @@
 		<div id="mapDiv" >
 			<div id="search"></div>
 			<div id="HomeButton" class="button"></div>
-			<div id="basemapDiv"></div>
+			<div id="basemapButton" class="button">Imagery</div>
 		</div>
 		<div id="tableDiv"></div>
 		</div>
