@@ -143,34 +143,45 @@
       width: 400px;
 	 }
 
-	 .esriAttributeInspector .atiRichTextField {
-	  margin: 5px auto;
-	  width: 180px;
+	 #logoff {
+	 	position: absolute;
+	 	text-align: center;
+	 	padding: 0px 10px;
+	 	color: #337ab7;
+	 	font-weight: bold;
+        width: auto;
+        border: 5px;
+        line-height: 32px;
+        height: 32px;
+        right: 10px;
+        bottom: 5px;
+        z-index: 30;
+        display: block;
+	 }
+
+	 #logoff:hover {
+	 	cursor: pointer;
+	 }
+
+     #dijit_Toolbar_0 {
+     	display: none;
+     } 
+
+     #dijit_Toolbar_1 {
+     	display: none;
+     } 
+
+     #dijit_Toolbar_2 {
+     	display: none;
+     } 
+
+     .dijitEditorIFrameContainer {
+     	background: white;
+     	border-style: solid;
+     	border-width: .5px;
+     	border-color: lightgray;
      }
 
-     .esriAttributeInspector #dijit_form_Button_5 {
-	  display: none;
-     }
-
-     .esriAttributeInspector #dijit_form_Button_6 {
-	  display: none;
-     }
-
-     .esriAttributeInspector #dijit_form_Button_7 {
-	  display: none;
-     }
-
-     .esriAttributeInspector #dijit_form_Button_8 {
-	  display: none;
-     }
-
-     .esriAttributeInspector #dijit_form_DropDownButton_0 {
-	  display: none;
-     }
-
-    .esriAttributeInspector .dijitToolbarSeparator {
-	  display: none;
-     }
 
 	</style>
 
@@ -273,6 +284,7 @@
 		parser.parse();
 
 	// Start up Identify Manager to handle permissions for layers with TxDOT-only access
+	
           var info = new OAuthInfo({
                     appId: "mzUb97L38u61Wa4a",
                     portalUrl: "https://txdot.maps.arcgis.com",
@@ -321,7 +333,7 @@
 		var GRIDAnalyst = '';
 	  	var expArray = [];
 	  	var count = 1;
-	  	var appVersion = "Version 1.0"
+	  	var appVersion = "Version 1.1"
 
 		//GOOGLE IMAGERY//
 
@@ -792,22 +804,17 @@
 				}
 			});
 
+		// Logoff
+			$('#logoff').click(function() {
+	            IdentityManager.destroyCredentials();
+	            location.reload(true)
+	       });
+
+
       	// Activate Toolbar
       		// workflowLyr.on("dbl-click", activateToolbar);
 
     // FUNCTIONS..........................................................................
-
-    	// Set up edit toolbar
-    		// var editToolbar = new Edit(map);
-      //     	function activateToolbar(graphic) {
-      //     		console.log("edit toolbar activated");
-	     //        map.infoWindow.hide();
-	     //        var selectedFeature = graphic.graphic;  
-	     //        var options = {};
-      //       	editToolbar.activate(Edit.MOVE, selectedFeature, options);
-      //     }
-
-    	
 
     	// Build attribute table
 
@@ -1132,7 +1139,7 @@
   		<div class="row">
 		<div class="col-sm-3 sidenav">
 	  		<h2 style="font-size:48px;">RETS Dashboard</h2>
-	  		<p style="font-size:17px; padding-left: 5px;">Your one-stop-shop for everything RETS related!</p>
+	  		<p style="font-size:20px; letter-spacing: 3px; padding-left: 3px; color: dimgray;">Roadway Edits Tracking System</p>
 	  			<label for="GISAnalystSel"></label>
 			      <div class="dropdown">
 				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="analystBtn" style="width:375px;">Select an GIS Analyst
@@ -1200,6 +1207,7 @@
 			<div id="search"></div>
 			<div id="HomeButton" class="button"></div>
 			<div id="basemapButton" class="button">Imagery</div>
+			<div id="logoff" class="button">Log Off</div>
 		</div>
 		<div id="tableDiv"></div>
 		</div>
