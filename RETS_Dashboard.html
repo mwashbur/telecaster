@@ -148,7 +148,7 @@
 	 	text-align: center;
 	 	padding: 0px 10px;
 	 	color: #337ab7;
-	 	background-color: rgba(0, 0, 0, .05);
+	 	background-color: rgba(255, 255, 255, .4);
         background-size: 24px 24px;
         border-radius: 5px;
 	 	font-weight: bold;
@@ -164,6 +164,23 @@
 
 	 #logoff:hover {
 	 	cursor: pointer;
+	 }
+
+	 #analystDisplay {
+	 	position: absolute;
+	 	text-align: left;
+	 	padding: 0px 10px;
+	 	color: #337ab7;
+	 	background-color: rgba(255, 255, 255, 1);
+        border-radius: 5px;
+        width: auto;
+        border: 5px;
+        line-height: 20px;
+        height: auto;
+        left: 20px;
+        bottom: 15px;
+        z-index: 30;
+        display: none;
 	 }
 
      #dijit_Toolbar_0 {
@@ -229,6 +246,10 @@
         "esri/arcgis/OAuthInfo",
         "esri/IdentityManager",
 
+        "esri/symbols/TextSymbol",
+		"esri/symbols/Font",
+		"esri/layers/LabelLayer",
+
         "dojo/parser",
         "dojo/_base/array",
         "dojo/keys",
@@ -275,6 +296,10 @@
             OAuthInfo,
             IdentityManager,
 
+            TextSymbol,
+            Font,
+            LabelLayer,
+
             parser,
             array, 
             keys,
@@ -288,13 +313,13 @@
 
 	// Start up Identify Manager to handle permissions for layers with TxDOT-only access
 
-          var info = new OAuthInfo({
-                    appId: "mzUb97L38u61Wa4a",
-                    portalUrl: "https://txdot.maps.arcgis.com",
-                    popup: false
-                });
-            IdentityManager.registerOAuthInfos([info]);
-            IdentityManager.getCredential(info.portalUrl + "/sharing");				
+          // var info = new OAuthInfo({
+          //           appId: "mzUb97L38u61Wa4a",
+          //           portalUrl: "https://txdot.maps.arcgis.com",
+          //           popup: false
+          //       });
+          //   IdentityManager.registerOAuthInfos([info]);
+          //   IdentityManager.getCredential(info.portalUrl + "/sharing");				
 
 	// CREATE MAP..........................................................
 
@@ -337,6 +362,9 @@
 	  	var expArray = [];
 	  	var count = 1;
 	  	var appVersion = "Version 1.2"
+	  	var GISAnlstDisplay;
+	    var GRIDAnlstDisplay;
+		var DistAnlstDisplay;
 
 		//GOOGLE IMAGERY//
 
@@ -366,7 +394,19 @@
 		map.addLayer(workflowLyr);	
 
 		// District layer used to grab analysts' names for district assignments
-		var queryLyr = new FeatureLayer("http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_RETS_DistCnty_lookup/FeatureServer/0",{id: "Districts", outFields : ["DIST_NM", "GIS_ANLST", "GRID_ANLST", "DIST_ANLST", "CNTY_NM"]});
+		var queryLyr = new FeatureLayer("http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_RETS_DistCnty_lookup/FeatureServer/0",{id: "Districts", outFields : ["DIST_NM", "GIS_ANLST", "GRID_ANLST", "DIST_ANLST", "CNTY_NM"]});		
+
+		// Label layer for District Analysts names (TEMPORARY)
+			var label_symbol =  new TextSymbol();
+			label_symbol.setColor(new Color("#f4ad42"));
+			label_symbol.setFont(new Font("8pt", Font.STYLE_NORMAL, Font.WEIGHT_BOLD, Font.VARIANT_NORMAL, "Tahoma"));
+			label_symbol.setHaloSize(2);
+			label_symbol.setHaloColor(new Color([255,255,255]));
+
+			var label_renderer = new SimpleRenderer(label_symbol);
+			queryLyrLabel = new LabelLayer({id:"Analyst_Labels"});
+			queryLyrLabel.addFeatureLayer(queryLyr, label_renderer, "GIS:{GIS_ANLST}"); 
+			
 
 		// TxDOT Roadways layer used for snapping and to grab route information
 		var roadwayLyr = new FeatureLayer("http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0",{id: "TxDOT Roadways", outFields : ["*"]});
@@ -653,6 +693,7 @@
 	        	console.log(appVersion);
 	        	loadTable();
 	        	queryStatus();
+	        	queryAnalystsBasedOnMapCenter();
 	        	console.log("Map on-load event");
         	});	
 
@@ -812,6 +853,35 @@
 	            IdentityManager.destroyCredentials();
 	            location.reload(true);
 	       });
+
+		// Get zoom
+			// map.on("zoom-end", queryAnalystsBasedOnMapCenter);
+
+			map.on("extent-change", queryAnalystsBasedOnMapCenter);
+
+			function queryAnalystsBasedOnMapCenter(evt){
+				center = map.extent.getCenter();
+				console.log(center);
+				query = new Query();
+			    query.geometry = center;
+
+				// Get Route Name from TxDOT Roadways
+			  	queryLyr.queryFeatures(query, function (results){
+			      GISAnlstDisplay= results.features[0].attributes.GIS_ANLST;
+			      GRIDAnlstDisplay = results.features[0].attributes.GRID_ANLST;
+			      DistAnlstDisplay = results.features[0].attributes.DIST_ANLST;
+			      console.log(GISAnlstDisplay);
+			      console.log(GRIDAnlstDisplay);
+			      console.log(DistAnlstDisplay);
+			      if (GISAnlstDisplay == undefined){
+			      	dojo.query("#analystDisplay").style("display", "none");
+			      }
+			      else {
+			      document.getElementById("analystDisplay").innerHTML = "<span style='text-decoration: underline;''>" + "Analysts based on map center:" + "</span>" + "<br />" + "GIS Analyst: " + GISAnlstDisplay + "<br />" + "     GRID Analyst: " + GRIDAnlstDisplay + "<br />" + "     District Analyst: " + DistAnlstDisplay;
+			      dojo.query("#analystDisplay").style("display", "block");
+			  	  }	
+			    });
+			}
 
 
       	// Activate Toolbar
@@ -1211,6 +1281,7 @@
 			<div id="HomeButton" class="button"></div>
 			<div id="basemapButton" class="button">Imagery</div>
 			<div id="logoff" class="button">Log Off</div>
+			<div id="analystDisplay"></div>
 		</div>
 		<div id="tableDiv"></div>
 		</div>
