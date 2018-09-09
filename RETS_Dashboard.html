@@ -313,13 +313,13 @@
 
 	// Start up Identify Manager to handle permissions for layers with TxDOT-only access
 
-          var info = new OAuthInfo({
-                    appId: "mzUb97L38u61Wa4a",
-                    portalUrl: "https://txdot.maps.arcgis.com",
-                    popup: false
-                });
-            IdentityManager.registerOAuthInfos([info]);
-            IdentityManager.getCredential(info.portalUrl + "/sharing");				
+          // var info = new OAuthInfo({
+          //           appId: "mzUb97L38u61Wa4a",
+          //           portalUrl: "https://txdot.maps.arcgis.com",
+          //           popup: false
+          //       });
+          //   IdentityManager.registerOAuthInfos([info]);
+          //   IdentityManager.getCredential(info.portalUrl + "/sharing");				
 
 	// CREATE MAP..........................................................
 
@@ -357,6 +357,7 @@
 	  	var finalExp;
 	  	var stat = '';
 		var prior = '';
+		var assignment = ''; //TEMP
 		var analyst = '';
 		var GRIDAnalyst = '';
 	  	var expArray = [];
@@ -793,6 +794,42 @@
             	$('#GISAnalystSel').append($(listItem).attr('value',this).html("<a href='#GRIDAnalystSel'>"+ this +"</a>"));
         	});    
 
+        	// Begin TEMP Assignment Filter...........................................................................................
+
+	        	var assignmentArray = [
+	        		"Brian Alt",
+					"Chris Bardash",
+					"Richard Barrientos",
+					"Nicole Beecher",
+					"Sam Bogle",
+					"Jason Ferrell",
+					"Eric Kinsey",
+					"Jessica Lane",
+					"Tom Neville",
+					"John Phillips",
+					"Grace Richey",
+					"Jeremy Rogers",
+					"Stephen Ross",
+					"Travis Scruggs",
+					"Matt Washburn",
+					"George Sosa",
+					"Joel Campbell"
+	        	];
+	        	$.each(assignmentArray,function(){
+	            	var listItem = document.createElement('li');
+	            	$('#assignmentSel').append($(listItem).attr('value',this).html("<a href='#assignmentSel'>"+ this +"</a>"));
+	        	});  
+
+	    	// Get the value of the Assignment dropdown menu for workflowLyr definition query
+			 	$("#assignmentSel li").click(function(){
+		 		  $("#assignmentBtn").text($(this).text());
+			      var text = $(this).text();
+			      console.log(text);
+			      filterAssignment(text);
+				});  
+
+		// End TEMP Assignment Filter...........................................................................................
+
         // Get the value of the Analyst dropdown menu for workflowLyr definition query
 		 	$("#GISAnalystSel li").click(function(){
 	 		  $("#analystBtn").text($(this).text());
@@ -894,7 +931,7 @@
 	    	function loadTable(){
 	    		console.log("Running Load Table function to build attribute table");
 
-			   	// workflowLyr.setSelectionSymbol(selectionSymbol);
+			   	workflowLyr.setSelectionSymbol(selectionSymbol);
 
           		//create new FeatureTable and set its properties 
 	          	myFeatureTable = new FeatureTable({
@@ -1009,7 +1046,21 @@
 
 
 	 
-		// Definition Query to filter workflow layer based on Status field
+		// Definition Query to filter workflow layer based on dropdown selections
+			// Begin TEMP Assignment filter..................................
+				function filterAssignment (value){
+					console.log(value);			
+					if (value == "All Assignments") {
+			       		assignment ="";	
+					}
+					else {
+						assignment = "Assignment = '" + value + "'";
+					}
+					console.log(assignment);
+					buildDefExp();
+				}
+			// End TEMP Assignment filter..................................
+
 			function filterAnalyst (value){
 				console.log(value);			
 				if (value == "All Analysts") {
@@ -1064,7 +1115,13 @@
 				console.log(analyst);
 				console.log(prior);
 				console.log(stat);
+				console.log(assignment); //TEMP
 				expArray =[];
+				// TEMP Assignment filter
+				if (assignment !== ""){
+					expArray.push(assignment);
+				}
+				// End TEMP Assignment filter
 				if (analyst !== ""){
 					expArray.push(analyst);
 				}
@@ -1251,7 +1308,15 @@
 				      <li value="Yes"><a href="#prioritySel">Yes</a></li>
 				      <li value="No"><a href="#prioritySel">No</a></li>
 				    </ul>
-				  </div>  	
+				  </div> 
+				<label for="assignmentSel" style="color:lightgrey";></label>
+			      <div class="dropdown">
+				    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="assignmentBtn" style="width:375px;">Assignment
+				    <span class="caret"></span></button>
+				    <ul id="assignmentSel" class="dropdown-menu" style="width:375px;">
+				      <li value="All Priorities"><a href="#prioritySel">All Assignments</a></li>
+				    </ul>
+				  </div>  	   	
 			  	<br></br>      
 				<table class="table table-hover" style="width:375px";>
 				<thead>
