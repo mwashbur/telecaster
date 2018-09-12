@@ -312,13 +312,14 @@
 
 	// Start up Identify Manager to handle permissions for layers with TxDOT-only access
 
-          // var info = new OAuthInfo({
-          //           appId: "mzUb97L38u61Wa4a",
-          //           portalUrl: "https://txdot.maps.arcgis.com",
-          //           popup: false
-          //       });
-          //   IdentityManager.registerOAuthInfos([info]);
-          //   IdentityManager.getCredential(info.portalUrl + "/sharing");				
+          var info = new OAuthInfo({
+                    appId: "mzUb97L38u61Wa4a",
+                    portalUrl: "https://txdot.maps.arcgis.com",
+                    popup: false,
+                    expiration: 1
+                });
+            IdentityManager.registerOAuthInfos([info]);
+            IdentityManager.getCredential(info.portalUrl + "/sharing");				
 
 	// CREATE MAP..........................................................
 
@@ -928,6 +929,7 @@
 			$('#logoff').click(function() {
 	            IdentityManager.destroyCredentials();
 	            location.reload(true);
+	            console.log("Logoff and reload");
 	       });
 
 		// Get zoom
