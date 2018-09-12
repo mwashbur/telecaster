@@ -202,7 +202,6 @@
      	border-color: lightgray;
      }
 
-
 	</style>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -313,13 +312,13 @@
 
 	// Start up Identify Manager to handle permissions for layers with TxDOT-only access
 
-          var info = new OAuthInfo({
-                    appId: "mzUb97L38u61Wa4a",
-                    portalUrl: "https://txdot.maps.arcgis.com",
-                    popup: false
-                });
-            IdentityManager.registerOAuthInfos([info]);
-            IdentityManager.getCredential(info.portalUrl + "/sharing");				
+          // var info = new OAuthInfo({
+          //           appId: "mzUb97L38u61Wa4a",
+          //           portalUrl: "https://txdot.maps.arcgis.com",
+          //           popup: false
+          //       });
+          //   IdentityManager.registerOAuthInfos([info]);
+          //   IdentityManager.getCredential(info.portalUrl + "/sharing");				
 
 	// CREATE MAP..........................................................
 
@@ -361,8 +360,9 @@
 		var analyst = '';
 		var GRIDAnalyst = '';
 	  	var expArray = [];
-	  	var count = 1;
-	  	var appVersion = "Version 1.2"
+	  	var oID;
+	  	var previousID = '';
+	  	var appVersion = "Version 1.3"
 	  	var GISAnlstDisplay;
 	    var GRIDAnlstDisplay;
 		var DistAnlstDisplay;
@@ -679,14 +679,18 @@
 
 	// EVENTS.............................................................................
 
+		// Hide dropdown when selecting from dropdowns
+			$(".dropdown").click(function(){
+	 		  map.infoWindow.hide();
+	 		  myFeatureTable.clearFilter(); 
+    		  myFeatureTable.refresh();
+			});  
+
 		// Refresh layer on edits complete to get point symbol to show up properly
 			workflowLyr.on("edits-complete", function(){
-				console.log("Refresh workflowLyr, clear filter and refresh myFeatureTable, and run Query Status function, on workflowLyr edits complete event");
+				console.log("Refresh workflowLyr and run Query Status function on workflowLyr edits complete event");
 				workflowLyr.refresh();
-				myFeatureTable.clearFilter(); 
-            	myFeatureTable.refresh();
             	queryStatus();
-            	count = 1;
 			});
 
 		// Load a FeatureTable and update Status Table to the application once map loads
@@ -697,6 +701,41 @@
 	        	queryAnalystsBasedOnMapCenter();
 	        	console.log("Map on-load event");
         	});	
+
+    	// Show selected records in attribute table and clear feature selection on map click (clears selected features from workflow layer after finishing editing)
+    	
+    		workflowLyr.on("click", function(evt) {
+				console.log(previousID);
+				oID = evt.graphic.attributes.OBJECTID;					
+				console.log(oID);
+			});
+
+    		map.on("click", function(){
+    			console.log("click!");
+    			var selectedFeatures = workflowLyr.getSelectedFeatures();
+    			console.log(selectedFeatures);
+    			var objectIdArray = [];
+    			$.each(selectedFeatures,function(i){	            	
+	            	objectIdArray.push(selectedFeatures[i].attributes.OBJECTID);
+	            	console.log(objectIdArray);
+        		});   
+    			console.log(selectedFeatures);
+    			if (selectedFeatures === undefined || selectedFeatures.length == 0){
+    				myFeatureTable.clearFilter(); 
+            		myFeatureTable.refresh();
+            		previousID = '';
+    			}
+    			else {					
+					if (previousID !==oID){
+						console.log("Running function to filter attribute table on workflowLyr click event");
+	            		myFeatureTable.filterRecordsByIds([objectIdArray]);
+	            		previousID = oID;
+					}
+					else {
+						console.log("NOT running function to filter attribute table on workflowLyr click event");						
+					}		          	
+				}	
+    		});
 
 		// Prepopulate District info in workflowLyr
 		  	template.on("selection-change", function(){
@@ -898,18 +937,17 @@
 
 			function queryAnalystsBasedOnMapCenter(evt){
 				center = map.extent.getCenter();
-				console.log(center);
+				// console.log(center);
 				query = new Query();
 			    query.geometry = center;
 
-				// Get Route Name from TxDOT Roadways
 			  	queryLyr.queryFeatures(query, function (results){
 			      GISAnlstDisplay= results.features[0].attributes.GIS_ANLST;
 			      GRIDAnlstDisplay = results.features[0].attributes.GRID_ANLST;
 			      DistAnlstDisplay = results.features[0].attributes.DIST_ANLST;
-			      console.log(GISAnlstDisplay);
-			      console.log(GRIDAnlstDisplay);
-			      console.log(DistAnlstDisplay);
+			      // console.log(GISAnlstDisplay);
+			      // console.log(GRIDAnlstDisplay);
+			      // console.log(DistAnlstDisplay);
 			      if (GISAnlstDisplay == undefined){
 			      	dojo.query("#analystDisplay").style("display", "none");
 			      }
@@ -920,9 +958,6 @@
 			    });
 			}
 
-
-      	// Activate Toolbar
-      		// workflowLyr.on("dbl-click", activateToolbar);
 
     // FUNCTIONS..........................................................................
 
@@ -973,22 +1008,7 @@
 					// console.log(roadwayLyr.getSelectedFeatures());
 				}); 
 
-	    	}
-
-	    	// On clicking on the workflowLyr filter the table for selected records
-				workflowLyr.on("click", function(evt) {
-					console.log(count);
-					if (count ==1){
-						console.log("Running function to filter attribute table on workflowLyr click event");
-						var id = evt.graphic.attributes.OBJECTID;
-						console.log(id);
-	            		myFeatureTable.filterRecordsByIds([id]);
-	            		count +=1;
-					}
-					else {
-						return
-					}					
-	          	});
+	    	}	    	
 
     	// Prepopulate Analysts, Route, District, and County fields after drawing a new point
 
