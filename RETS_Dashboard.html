@@ -816,14 +816,14 @@
 
 	// Start up Identify Manager to handle permissions for layers with TxDOT-only access
 
-          // var info = new OAuthInfo({
-          //           appId: "mzUb97L38u61Wa4a",
-          //           portalUrl: "https://txdot.maps.arcgis.com",
-          //           popup: false,
-          //           expiration: 720
-          //       });
-          //   IdentityManager.registerOAuthInfos([info]);
-          //   IdentityManager.getCredential(info.portalUrl + "/sharing");				
+          var info = new OAuthInfo({
+                    appId: "mzUb97L38u61Wa4a",
+                    portalUrl: "https://txdot.maps.arcgis.com",
+                    popup: false,
+                    expiration: 720
+                });
+            IdentityManager.registerOAuthInfos([info]);
+            IdentityManager.getCredential(info.portalUrl + "/sharing");				
 
 	// VARIABLES**********************************************************************************************
 
