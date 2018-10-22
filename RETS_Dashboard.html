@@ -340,7 +340,7 @@
 
 		<div id="tocSideNav" class="sidenav">
 			<div class=col-sm-1>
-				<a id="closeBtn" class="glyphicon glyphicon-chevron-left"></a>
+				<span id="closeBtn" class="glyphicon glyphicon-chevron-left"></span>
 			</div>
 			<div style="height: 100%;" class=col-sm-11>
 				<h3 style="padding-left: 15px; padding-top: 10px; padding-bottom: 30px;">Roadway Edits Tracking System</h3>
@@ -816,14 +816,14 @@
 
 	// Start up Identify Manager to handle permissions for layers with TxDOT-only access
 
-          var info = new OAuthInfo({
-                    appId: "mzUb97L38u61Wa4a",
-                    portalUrl: "https://txdot.maps.arcgis.com",
-                    popup: false,
-                    expiration: 720
-                });
-            IdentityManager.registerOAuthInfos([info]);
-            IdentityManager.getCredential(info.portalUrl + "/sharing");				
+          // var info = new OAuthInfo({
+          //           appId: "mzUb97L38u61Wa4a",
+          //           portalUrl: "https://txdot.maps.arcgis.com",
+          //           popup: false,
+          //           expiration: 720
+          //       });
+          //   IdentityManager.registerOAuthInfos([info]);
+          //   IdentityManager.getCredential(info.portalUrl + "/sharing");				
 
 	// VARIABLES**********************************************************************************************
 
