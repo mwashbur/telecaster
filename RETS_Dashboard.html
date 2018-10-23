@@ -849,7 +849,7 @@
 	  	var expArray = [];
 	  	var oID;
 	  	var previousID = '';
-	  	var appVersion = "Version 2.0"
+	  	var appVersion = "Version 2.0.1"
 	  	var GISAnlstDisplay;
 	    var GRIDAnlstDisplay;
 		var DistAnlstDisplay;
@@ -1625,9 +1625,21 @@
 
 		// Cancel edits
 			$('#cancelBtn').click(function (){
-				if (templateSelected !== undefined) {
+				console.log(templateSelected);
+				if (templateSelected === undefined | templateSelected === null) {
+					console.log("Cancelled");
+					$('#moveBtn').html("Move");
+					workflowLyr.clearSelection();
+	            	workflowLyr.refresh();
+	            	myFeatureTable.clearFilter(); 
+	    			myFeatureTable.refresh();
+	    			editToolbar.deactivate();
+					$("#attrSideNav").css("width","0");
+	            	$("#attrForm").trigger("reset");            		
+            	}
+            	else {
 					console.log(selectedFeatures);
-					console.log("Add point in progress");
+					console.log("Cancelling add point");
             		workflowLyr.applyEdits(null, null, selectedFeatures, function(){
             			console.log("Deleting added points after cancel");
             			$('#moveBtn').html("Move");
@@ -1641,18 +1653,7 @@
 		    			$('#clearBtn').css("display", "none");
 						$("#attrSideNav").css("width","0");
 		            	$("#attrForm").trigger("reset");
-            		});
-            	}
-            	else {
-					console.log("Cancelled");
-					$('#moveBtn').html("Move");
-					workflowLyr.clearSelection();
-	            	workflowLyr.refresh();
-	            	myFeatureTable.clearFilter(); 
-	    			myFeatureTable.refresh();
-	    			editToolbar.deactivate();
-					$("#attrSideNav").css("width","0");
-	            	$("#attrForm").trigger("reset");
+	            	});
             	}
 			});	
 
@@ -1729,7 +1730,9 @@
 					$('#moveBtn').html("Move");
 					$('#moBtn').prop('disabled', false);
 					$('#clearBtn').css("display", "none");
+					console.log(templateSelected);
 	        	});	
+
  			}
 
 	        function deleteEdits(){
