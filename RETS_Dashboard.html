@@ -238,7 +238,7 @@
 	}
 
 	.HomeButton .home {
-	background-image: url("http://maps.dot.state.tx.us/Images/TexasIcon.png");
+	background-image: url("https://maps.dot.state.tx.us/Images/TexasIcon.png");
 	background-size: 24px 24px;
 	width: 32px;
 	height: 32px;
@@ -849,7 +849,7 @@
 	  	var expArray = [];
 	  	var oID;
 	  	var previousID = '';
-	  	var appVersion = "Version 2.0.1"
+	  	var appVersion = "Version 2.0.2"
 	  	var GISAnlstDisplay;
 	    var GRIDAnlstDisplay;
 		var DistAnlstDisplay;
@@ -920,10 +920,10 @@
 			    workflowLyr.setSelectionSymbol(selectionSymbol);
 
 		// District layer used to grab analysts' names for district assignments
-			var queryLyr = new FeatureLayer("http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_RETS_DistCnty_lookup/FeatureServer/0",{id: "Districts", outFields : ["DIST_NM", "GIS_ANLST", "GRID_ANLST", "DIST_ANLST", "CNTY_NM"]});				
+			var queryLyr = new FeatureLayer("https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_RETS_DistCnty_lookup/FeatureServer/0",{id: "Districts", outFields : ["DIST_NM", "GIS_ANLST", "GRID_ANLST", "DIST_ANLST", "CNTY_NM"]});				
 
 		// TxDOT Roadways layer used for snapping and to grab route information
-			var roadwayLyr = new FeatureLayer("http://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0",{id: "TxDOT Roadways", outFields : ["*"]});
+			var roadwayLyr = new FeatureLayer("https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0",{id: "TxDOT Roadways", outFields : ["*"]});
 			map.addLayer(roadwayLyr);
 			roadwayLyr.advancedQueryCapabilities = {"advancedQueryCapabilities" : {
 		  		"supportsQueryWithDistance" : true, 
@@ -960,7 +960,7 @@
 
 
 		// Call in the AGO geometry service
-		  	var geomServ = new GeometryService("http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
+		  	var geomServ = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
 
   	// WIDGETS********************************************************************************************************
 
@@ -1106,8 +1106,8 @@
 
 	         sources.push({
 	            featureLayer: new FeatureLayer("https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0"),
-	            searchFields: ["RTE_RB_NM"],
-	            displayField: "RTE_RB_NM",
+	            searchFields: ["SEARCH"],
+	            displayField: "SEARCH",
 	            exactMatch: false,
 	            name: "Route",
 	            outFields: ["*"],
@@ -1635,7 +1635,8 @@
 	    			myFeatureTable.refresh();
 	    			editToolbar.deactivate();
 					$("#attrSideNav").css("width","0");
-	            	$("#attrForm").trigger("reset");            		
+	            	$("#attrForm").trigger("reset");   
+	            	previousID = '';       		
             	}
             	else {
 					console.log(selectedFeatures);
@@ -1654,6 +1655,7 @@
 						$("#attrSideNav").css("width","0");
 		            	$("#attrForm").trigger("reset");
 	            	});
+	            	previousID = '';
             	}
 			});	
 
@@ -1730,6 +1732,7 @@
 					$('#moveBtn').html("Move");
 					$('#moBtn').prop('disabled', false);
 					$('#clearBtn').css("display", "none");
+					previousID = ''; 
 					console.log(templateSelected);
 	        	});	
 
@@ -1749,6 +1752,7 @@
 	            	$("#attrForm").trigger("reset");
 					$('#moveBtn').html("Move");
 					$('#clearBtn').css("display", "none");
+					previousID = ''; 
 	 			});        	  	
 	        }
 
